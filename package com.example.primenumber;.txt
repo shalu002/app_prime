@@ -1,0 +1,60 @@
+package com.example.primenumber;
+
+import static com.example.primenumber.R.*;
+import static com.example.primenumber.R.string.not_prime_number;
+import static com.example.primenumber.R.string.prime_number;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+
+import androidx.appcompat.app.AppCompatActivity;
+public class MainActivity extends AppCompatActivity {
+
+    private EditText numberEditText;
+    private Button checkButton;
+    private TextView resultTextView;
+    TextView heading;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        numberEditText = findViewById(R.id.number_et);
+        checkButton = findViewById(R.id.check_button);
+        resultTextView = findViewById(R.id.result_tv);
+        heading = findViewById(id.heading_tv);
+
+        checkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String numberString = numberEditText.getText().toString().trim();
+                if (numberString.isEmpty()) {
+                    resultTextView.setText(getString(string.invalid_input));
+                } else {
+                    int number = Integer.parseInt(numberString);
+                    boolean isPrime = isPrimeNumber(number);
+                    resultTextView.setText(getString(
+                            isPrime ? prime_number : not_prime_number,
+                            new Object[]{number}));
+                }
+            }
+        });
+    }
+
+    private boolean isPrimeNumber(int number) {
+        if (number <= 1) return false;
+        if (number <= 3) return true;
+        if (number % 2 == 0 || number % 3 == 0) return false;
+        int i = 5;
+        while (i * i <= number) {
+            if (number % i == 0 || number % (i + 2) == 0) return false;
+            i += 6;
+        }
+        return true;
+    }
+}
